@@ -8,7 +8,7 @@ const Main = (props) =>
     <main>
         <Switch>
             <Route exact path='/' component={Home} />
-            <Route path='/auth/:token/:redirect?' component={Auth} />
+            <Route path='/auth/:token' component={Auth} />
             <Route exact path='/protected' render={() => <Message>protected page</Message>} />
         </Switch>
     </main>

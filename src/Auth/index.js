@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import { Redirect } from 'react-router'
 import axios from 'axios'
 import Message from '../Message'
 
@@ -6,11 +7,26 @@ export default class Auth extends Component {
 
     constructor(props) {
         super(props)
+        let params = this.queryStringParse(this.props.location)
         this.state = {
             status: 'not-authenticated',
             token: this.props.match.params.token,
-            redirect: this.props.match.params.redirect
+            redirect: params.redirect
         }
+    }
+
+    queryStringParse(location) {
+        let params = []
+
+        if( location.search ) {
+            let querys = location.search.substring(1).split('&')
+            querys.forEach(query => {
+                let param = query.split('=')
+                params[param[0]] = param[1]
+            })
+        }
+
+        return params
     }
 
     componentDidMount() {
@@ -42,7 +58,7 @@ export default class Auth extends Component {
             return <Message>{this.state.message}</Message>
         } else if( this.state.status === 'authenticated' ){
             if( this.state.redirect ) {
-                window.location = '/' + this.state.redirect
+                return <Redirect to={'/' + this.state.redirect} />
             } else {
                 return <Message>User Successful Authenticated</Message>
             }
